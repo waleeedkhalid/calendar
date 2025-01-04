@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقويم الدراسي للفصل الثاني 1446 هـ - 2024 م</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="size"></div>
+        <div class="stick">
+            <button id="themeToggle">Toggle Theme</button>
+            <button id="printButton">Print Calendar</button>
+        </div>
+        <style>
+            .stick {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
+
+            #themeToggle {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            #printButton {
+                background-color: #28a745;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            
+        </style>
+        <h1 id="calendar-id"></h1>
+        <div class="calendar-grid" id="calendar-grid">
+            <!-- JavaScript will dynamically insert the calendar weeks here -->
+        </div>
+    </div>
+    <!-- <script src="https://rawgit.com/abdennour/hijri-date/master/cdn/hijri-date-latest.js" type="text/javascript" ></script> -->
+    <script src="./js/calendar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const calendarGrid = document.getElementById('calendar-grid');
+    const calendarId = document.getElementById('calendar-id');
+
+    // Function to generate and download PDF
+    const printCalendarAsPDF = () => {
+        // Initialize jsPDF with A3 size
+        const { jsPDF } = window.jspdf;
+
+        // Convert the calendar grid to a data URL image
+        const calendarElement = document.body;
+
+        const toggleButton = document.querySelector('#themeToggle'); // Select the button to hide
+        const printButton = document.querySelector('#printButton'); // Select the button to hide
+
+        // Temporarily hide the button
+        printButton.style.display = 'none';
+        toggleButton.style.display = 'none';
+
+        html2canvas(calendarElement, {
+            scale: 2,
+            useCORS: true,
+        }).then((canvas) => {
+            // Get the canvas dimensions
+            const imgData = canvas.toDataURL('image/jpeg');
+            const imgWidth = calendarElement.getBoundingClientRect().width; // Convert pixels to mm (1 px = 0.264583 mm)
+            const imgHeight = calendarElement.getBoundingClientRect().height; // Convert pixels to mm
+
+            const pdf = new jsPDF({
+                orientation: imgHeight > imgWidth ? 'portrait' : 'landscape',
+                unit: 'mm',
+                format: [imgWidth, imgHeight]
+            });
+
+
+            pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight, '', 'FAST');
+
+
+            
+            // Generate the PDF blob and preview it
+            const pdfBlob = pdf.output('blob');
+            
+            // Calculate the size of the PDF in MB
+            const pdfSizeInBytes = pdfBlob.size; // Get the size in bytes
+            const pdfSizeInKB = pdfSizeInBytes / 1024; // Convert bytes to KB
+            const pdfSizeInMB = pdfSizeInBytes / (1024 * 1024); // Convert bytes to MB
+
+            document.getElementById('size').innerHTML = `PDF size: ${pdfSizeInMB > 1 ? pdfSizeInMB.toFixed(2) + " M" : pdfSizeInKB.toFixed(2) + " K"}B`;
+            
+            const url = URL.createObjectURL(pdfBlob);
+            window.open(url, '_blank');
+
+            // Save the PDF
+            // pdf.save('calendar_a3.pdf');
+        });
+    };
+
+    // Button to trigger the PDF generation
+    const printButton = document.getElementById('printButton');
+    // document.body.append(printButton, calendarGrid);
+
+    printButton.addEventListener('click', printCalendarAsPDF);
+});
+
+    </script>
+</body>
+</html>

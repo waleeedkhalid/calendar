@@ -1,0 +1,174 @@
+body {
+    font-family: 'Tajawal', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    direction: rtl; /* RTL for Arabic text */
+}
+
+body.dark-mode {
+    background-color: #333;
+    color: #f5f5f5;
+}
+
+.container {
+    width: 90%;
+    max-width: 100%;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    overflow: auto;
+}
+
+body.dark-mode .container {
+    background-color: #444;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+body.dark-mode h1 {
+    color: #fff;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns representing 4 weeks */
+    gap: 10px;
+    width: 100%;
+}
+
+.week {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #e9ecef; /* Light background for week headers */
+    padding: 10px;
+    border-radius: 10px;
+}
+
+body.dark-mode .week {
+    background-color: #555;
+}
+
+.day-box.event {
+    background-color: #d7f8da; /* Updated background color */
+    /* border: 1px solid #c6f5cb; /* Updated border color */
+    /* border-radius: 5px; */
+    /* padding: 5px; */
+    /* margin-top: 5px; */
+    font-size: 14px;
+}
+
+body.dark-mode .day-box.event {
+    background-color: #3a3a3a; /* Dark mode background color */
+    /* border: 1px solid #4a4a4a; /* Dark mode border color */
+}
+
+.day-box.holiday {
+    background-color: #d7f8da; /* Changed background color */
+    /* border: 1px solid #c6f5cb; /* Changed border color */
+    /* border-radius: 5px; */
+    /* padding: 5px; */
+    /* margin-top: 5px; */
+    font-size: 14px;
+}
+
+body.dark-mode .day-box.holiday {
+    background-color: #3a3a3a; /* Dark mode background color */
+    /* border: 1px solid #4a4a4a; /* Dark mode border color */
+}
+
+.day-box.exam {
+    background-color: #ffc107; /* Updated background color */
+    /* border: 1px solid #313131; /* Updated border color */
+    /* border-radius: 5px; */
+    /* padding: 5px; */
+    /* margin-top: 5px; */
+    font-size: 14px;
+}
+
+body.dark-mode .day-box.exam {
+    background-color: #7d3301; /* Dark mode background color */
+    border: 1px solid #7d3301; /* Dark mode border color */
+}
+
+.week h2 {
+    margin: 0;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+body.dark-mode .week h2 {
+    background-color: #007bff; /* Dark mode background color */
+    color: white; /* Dark mode text color */
+}
+
+.day-box {
+    border: 1px solid #313131;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #f9f9f9;
+    min-height: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+body.dark-mode .day-box {
+    border: 1px solid #555; /* Dark mode border color */
+    background-color: #4a4a4a; /* Dark mode background color */
+}
+
+.day-box h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #007bff;
+}
+
+body.dark-mode .day-box h3 {
+    color: #fff; /* Dark mode text color */
+}
+
+.day-box p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .calendar-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 weeks per row on smaller screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .calendar-grid {
+        grid-template-columns: 1fr; /* 1 week per row on very small screens */
+    }
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
