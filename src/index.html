@@ -736,7 +736,7 @@
             printButton.addEventListener('click', printCalendarAsPDF);
         });
     </script>
-        <script>
+    <script>
             let isDark = JSON.parse(localStorage.getItem('isDark')) || false;
 
             const updateTheme = () => {
@@ -755,6 +755,152 @@
                 localStorage.setItem('isDark', isDark);
                 updateTheme();
             });
-        </script>
+    </script>
+    <script>
+        // Function to parse the date from the day-box
+        function parseDate(dateString) {
+            const gregorianPart = dateString.split('/')[1].trim();
+            const [day, month] = gregorianPart.split(' ');
+            const currentYear = new Date().getFullYear();
+            const date = new Date(`${month} ${day}, ${currentYear}`);
+            return date;
+        }
+
+        // Function to create a wrapper for each day-box
+        function wrapDayBoxes() {
+            const dayBoxes = document.querySelectorAll('.day-box');
+
+            dayBoxes.forEach(dayBox => {
+                // Only wrap if not already wrapped
+                if (!dayBox.parentElement.classList.contains('day-box-wrapper')) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'day-box-wrapper';
+                    dayBox.parentNode.insertBefore(wrapper, dayBox);
+                    wrapper.appendChild(dayBox);
+                }
+            });
+        }
+
+        // Function to update day boxes with visual indicators
+        function updateDayBoxes() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // First ensure all day boxes are wrapped
+            wrapDayBoxes();
+
+            // Get all day box wrappers
+            const dayBoxWrappers = document.querySelectorAll('.day-box-wrapper');
+
+            dayBoxWrappers.forEach(wrapper => {
+                const dayBox = wrapper.querySelector('.day-box');
+                const dateParagraph = dayBox.querySelector('p');
+                const dateText = dateParagraph.textContent;
+                const boxDate = parseDate(dateText);
+
+                // Remove any existing indicators
+                const existingIndicator = wrapper.querySelector('.date-indicator');
+                if (existingIndicator) {
+                    existingIndicator.remove();
+                }
+
+                // Reset styles
+                dayBox.classList.remove('past-date', 'current-date');
+                dayBox.style.textDecoration = '';
+                dayBox.style.opacity = '';
+                dayBox.style.border = '';
+                dayBox.style.boxShadow = '';
+
+                if (boxDate < today) {
+                    // Past date
+                    dayBox.classList.add('past-date');
+
+                    // Add checkmark before the day-box
+                    const checkmark = document.createElement('span');
+                    checkmark.className = 'date-indicator checkmark';
+                    checkmark.innerHTML = '✓';
+                    wrapper.insertBefore(checkmark, dayBox);
+
+                    // Add strike-through effect
+                    dayBox.style.textDecoration = 'line-through';
+                    dayBox.style.textDecorationColor = '#666';
+                    dayBox.style.opacity = '0.7';
+                }
+                else if (boxDate.getTime() === today.getTime()) {
+                    // Current date
+                    dayBox.classList.add('current-date');
+
+                    // Add "TODAY" indicator
+                    const todayIndicator = document.createElement('span');
+                    todayIndicator.className = 'date-indicator today';
+                    todayIndicator.innerHTML = '📍';
+                    wrapper.insertBefore(todayIndicator, dayBox);
+
+                    // Highlight current day
+                    dayBox.style.border = '2px solid #007bff';
+                    dayBox.style.boxShadow = '0 0 10px rgba(0,123,255,0.2)';
+                }
+            });
+        }
+
+        // Add required CSS
+        const styles = `
+        .day-box-wrapper {
+            position: relative;
+            margin-bottom: 5px;
+        }
+        
+        .date-indicator {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            z-index: 1;
+            background-color: white;
+            border-radius: 50%;
+            padding: 2px;
+            font-size: 14px;
+        }
+        
+        .checkmark {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .today {
+            color: #007bff;
+            font-weight: bold;
+        }
+        
+        .past-date {
+            background-color: #f8f9fa;
+        }
+        
+        .current-date {
+            background-color: #e8f4ff;
+        }
+    `;
+
+        // Add styles to document
+        const styleSheet = document.createElement("style");
+        styleSheet.textContent = styles;
+        document.head.appendChild(styleSheet);
+
+        // Initialize on DOM content loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDayBoxes();
+
+            // Performance optimization: Only update when tab becomes visible
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    updateDayBoxes();
+                }
+            });
+        });
+
+        // Backup initialization in case DOMContentLoaded already fired
+        if (document.readyState !== 'loading') {
+            updateDayBoxes();
+        }
+    </script>
 </body>
 </html>
