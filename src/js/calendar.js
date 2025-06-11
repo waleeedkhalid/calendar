@@ -1,5 +1,3 @@
-const schedule = JSON.parse(localStorage.getItem('schedule')) || [];
-
 let isDark = JSON.parse(localStorage.getItem('isDark')) || false;
 
 const updateTheme = () => {
@@ -23,57 +21,26 @@ themeToggle.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', function() {
     const calendarGrid = document.getElementById('calendar-grid');
     const calendarId = document.getElementById('calendar-id');
-    // 461
-    // calendarId.innerText = "التقويم الدراسي للفصل الأول 1446 هـ - 2024 م";
+    
+    // calendarId.innerText = "التقويم الجامعي للفصل الثاني 1446 هـ - 2025 م";
+    calendarId.innerText = "تقويم الإجازة الصيفية 1446 هـ - 2025 م";
 
-    // const firstDayHijri = new Date(1446, 2, 14);
-    // const firstDayGregorian = new Date(2024, 7, 18); // August 18, 2024
-
-    // let hijriYear = 1446;
-    // let hijriMonth = 2;
-    // let hijriDay = 13;
-
-    calendarId.innerText = "التقويم الجامعي للفصل الثاني 1446 هـ - 2025 م";
-
-    const firstDayGregorian = new Date(2025, 0, 5); // January 5, 2025
+    // const firstDayGregorian = new Date(2025, 0, 5); // January 5, 2025
+    const firstDayGregorian = new Date(2025, 5, 8); // July 8, 2025
 
     let hijriYear = 1446;
-    let hijriMonth = 7;
-    let hijriDay = 4;
-
-    // const events = [
-    //     { date: '2/14', description: 'بداية الدراسة للفصل الأول', holiday: false },
-    //     { date: '3/19', description: 'إجازة اليوم الوطني', holiday: true },
-    //     { date: '3/20', description: 'إجازة اليوم الوطني', holiday: true },
-    //     { date: '5/5', description: 'بداية إجازة منتصف الفصل الدراسي الأول', holiday: true },
-    //     { date: '5/15', description: 'بداية الدراسة بعد الإجازة', holiday: true },
-    //     { date: '6/7', description: 'بداية الاختبارات النهائية لمقررات الإعداد العام', holiday: true },
-    //     { date: '6/14', description: 'بداية الاختبارات النهائية', holiday: true },
-    //     { date: '6/24', description: 'بداية إجازة منتصف العام', holiday: false },
-    // ];
-
-    const events461 = [
-        { date: '8/18', hijriDate: '2/14', description: 'بداية الدراسة للفصل الأول', holiday: false },
-        { date: '9/19', hijriDate: '3/19', description: 'إجازة اليوم الوطني', holiday: true },
-        { date: '9/20', hijriDate: '3/20', description: 'إجازة اليوم الوطني', holiday: true },
-        { date: '10/15', hijriDate: '5/5', description: 'بداية إجازة منتصف الفصل الدراسي الأول', holiday: true },
-        { date: '10/25', hijriDate: '5/15', description: 'بداية الدراسة بعد الإجازة', holiday: true },
-        { date: '11/7', hijriDate: '6/7', description: 'بداية الاختبارات النهائية لمقررات الإعداد العام', holiday: true },
-        { date: '11/14', hijriDate: '6/14', description: 'بداية الاختبارات النهائية', holiday: true },
-        { date: '11/24', hijriDate: '6/24', description: 'بداية إجازة منتصف العام', holiday: false },
-    ];
+    let hijriMonth = 12;
+    let hijriDay = 11;
 
     const events = [
-        { date: '1/5', hijriDate: '7-5', description: 'بداية الدراسة للفصل الثاني', holiday: false },
-        { date: '2/23', hijriDate: '8-24', description: 'إجازة يوم التأسيس', holiday: true },
-        { date: '3/13', hijriDate: '9-13', description: 'بداية إجازة عيد الفطر', holiday: true },
-        { date: '4/6', hijriDate: '10-8', description: 'بداية الدراسة بعد إجازة عيد الفطر', holiday: true },
-        { date: '4/17', hijriDate: '10-19', description: 'آخر موعد للاعتذار (سنوي)', holiday: false },
-        { date: '5/1', hijriDate: '11-3', description: 'آخر موعد للاعتذار عن الفصل أو مقرر', holiday: false },
-        { date: '5/11', hijriDate: '11-13', description: 'بداية الاختبارات النهائية الإعداد العام', holiday: true },
-        { date: '5/18', hijriDate: '11-20', description: 'بداية الاختبارات النهائية', holiday: true },
-        { date: '5/29', hijriDate: '12-2', description: 'نهاية الاختبارات النهائية', holiday: true },
-        { date: '5/29', hijriDate: '12-2', description: 'بداية إجازة نهاية العام الدراسي', holiday: true }
+        { date: '6/15', hijriDate: '12-19', description: 'بداية التهيئة للفصل الصيفي', holiday: false },
+        { date: '6/17', hijriDate: '12-21', description: 'بداية الدراسة للفصل الصيفي', holiday: false },
+        { date: '8/5', hijriDate: '2-11', description: 'بداية الاختبارات النهائية', holiday: false },
+        { date: '8/7', hijriDate: '2-13', description: 'نهاية الاختبارات النهائية', holiday: false },
+        { date: '8/17', hijriDate: '2-23', description: 'عودة أعضاء هيئة التدريس', holiday: false },
+        { date: '8/18', hijriDate: '2-25', description: 'نزول الجدول للمتخصصين بعد المغرب', holiday: false },
+        { date: '8/19', hijriDate: '2-26', description: 'فتح التعديل جداول المتخصصين', holiday: false },
+        { date: '8/24', hijriDate: '3-1', description: 'بداية الدراسة للعام الجامعي 1447 هـ / 2026-2027', holiday: false }
     ];
 
     function getDayName(dayIndex) {
@@ -90,8 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function incrementHijriDate(days) {
         hijriDay += days;
         const hijriMonthDays = {
-            1: 29, 2: 30, 3: 30, 4: 30, 5: 29, 6: 30,
-            7: 30, 8: 29, 9: 29, 10: 30, 11: 29, 12: 29
+            1: 30, 2: 29, 3: 30, 4: 30, 5: 30, 6: 29,
+            7: 30, 8: 29, 9: 30, 10: 29, 11: 30, 12: 29
         };
 
         while (hijriDay > hijriMonthDays[hijriMonth]) {
@@ -106,8 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${hijriMonth}-${hijriDay}`;
     }
 
-    console.log(schedule);
-    for (let weekIndex = 1; weekIndex <= 21; weekIndex++) {
+    for (let weekIndex = 1; weekIndex <= 12; weekIndex++) {
         const weekWrapper = document.createElement('div');
         weekWrapper.classList.add('week');
 
@@ -131,8 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const gregorianDate = day.concat(" ", month); // Use concat to join day and month with a space
             
             const event = events.find(e => e.hijriDate === hijriDate);
-            let examDay = schedule.find(e => e.examDate.split('-').slice(1).join('-') === hijriDate);
-            console.log(examDay);
 
             const dayBox = document.createElement('div');
             if (dayIndex === 5) { // 0 for Sunday, 6 for Saturday
@@ -153,12 +117,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 eventParagraph.textContent = event.description;
                 dayBox.appendChild(eventParagraph);
-            }
-            if(examDay) {
-                const examParagraph = document.createElement('span');
-                dayBox.classList.add('exam');
-                examParagraph.textContent = "فاينل " + examDay.courseCode;
-                dayBox.appendChild(examParagraph);
             }
 
             const dateParagraph = document.createElement('p');
