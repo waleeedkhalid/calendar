@@ -1,178 +1,213 @@
 <!DOCTYPE html>
 <html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>التقويم الدراسي للفصل الثاني 1446 هـ - 2024 م</title>
-    <link rel="stylesheet" href="./css/styles.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>التقويم الجامعي للفصل الأول 1447 هـ - 2025/2026 م</title>
+    <link rel="stylesheet" href="./css/styles.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div id="size"></div>
-        <div class="stick">
-            <button id="themeToggle">Toggle Theme</button>
-            <button id="printButton">Print Calendar</button>
-        </div>
-        <h1 id="calendar-id">التقويم الجامعي للفصل الثاني 1446 هـ - 2025 م</h1>
-        <div class="calendar-grid" id="calendar-grid"></div>
+      <div id="size"></div>
+      <div class="stick">
+        <button id="themeToggle">Toggle Theme</button>
+        <button id="printButton">Print Calendar</button>
+      </div>
+      <h1 id="calendar-id"></h1>
+      <div class="calendar-grid" id="calendar-grid"></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const calendarGrid = document.getElementById('calendar-grid');
-            const calendarId = document.getElementById('calendar-id');
+      document.addEventListener("DOMContentLoaded", () => {
+        const calendarGrid = document.getElementById("calendar-grid");
+        const calendarId = document.getElementById("calendar-id");
 
-            // Function to generate and download PDF
-            const printCalendarAsPDF = () => {
-                // Initialize jsPDF with A3 size
-                const { jsPDF } = window.jspdf;
+        // Function to generate and download PDF
+        const printCalendarAsPDF = () => {
+          // Initialize jsPDF with A3 size
+          const { jsPDF } = window.jspdf;
 
-                // Convert the calendar grid to a data URL image
-                const calendarElement = document.body;
+          // Convert the calendar grid to a data URL image
+          const calendarElement = document.body;
 
-                const toggleButton = document.querySelector('#themeToggle'); // Select the button to hide
-                const printButton = document.querySelector('#printButton'); // Select the button to hide
+          const toggleButton = document.querySelector("#themeToggle"); // Select the button to hide
+          const printButton = document.querySelector("#printButton"); // Select the button to hide
 
-                // Temporarily hide the button
-                printButton.style.display = 'none';
-                toggleButton.style.display = 'none';
+          // Temporarily hide the button
+          printButton.style.display = "none";
+          toggleButton.style.display = "none";
 
-                html2canvas(calendarElement, {
-                    scale: 2,
-                    useCORS: true,
-                }).then((canvas) => {
-                    // Get the canvas dimensions
-                    const imgData = canvas.toDataURL('image/jpeg');
-                    const imgWidth = calendarElement.getBoundingClientRect().width; // Convert pixels to mm (1 px = 0.264583 mm)
-                    const imgHeight = calendarElement.getBoundingClientRect().height; // Convert pixels to mm
+          html2canvas(calendarElement, {
+            scale: 2,
+            useCORS: true,
+          }).then((canvas) => {
+            // Get the canvas dimensions
+            const imgData = canvas.toDataURL("image/jpeg");
+            const imgWidth = calendarElement.getBoundingClientRect().width; // Convert pixels to mm (1 px = 0.264583 mm)
+            const imgHeight = calendarElement.getBoundingClientRect().height; // Convert pixels to mm
 
-                    const pdf = new jsPDF({
-                        orientation: imgHeight > imgWidth ? 'portrait' : 'landscape',
-                        unit: 'mm',
-                        format: [imgWidth, imgHeight]
-                    });
+            const pdf = new jsPDF({
+              orientation: imgHeight > imgWidth ? "portrait" : "landscape",
+              unit: "mm",
+              format: [imgWidth, imgHeight],
+            });
 
+            pdf.addImage(
+              imgData,
+              "JPEG",
+              0,
+              0,
+              imgWidth,
+              imgHeight,
+              "",
+              "FAST"
+            );
 
-                    pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight, '', 'FAST');
+            // Generate the PDF blob and preview it
+            const pdfBlob = pdf.output("blob");
 
+            // Calculate the size of the PDF in MB
+            const pdfSizeInBytes = pdfBlob.size; // Get the size in bytes
+            const pdfSizeInKB = pdfSizeInBytes / 1024; // Convert bytes to KB
+            const pdfSizeInMB = pdfSizeInBytes / (1024 * 1024); // Convert bytes to MB
 
+            document.getElementById("size").innerHTML = `PDF size: ${
+              pdfSizeInMB > 1
+                ? pdfSizeInMB.toFixed(2) + " M"
+                : pdfSizeInKB.toFixed(2) + " K"
+            }B`;
 
-                    // Generate the PDF blob and preview it
-                    const pdfBlob = pdf.output('blob');
+            const url = URL.createObjectURL(pdfBlob);
+            window.open(url, "_blank");
 
-                    // Calculate the size of the PDF in MB
-                    const pdfSizeInBytes = pdfBlob.size; // Get the size in bytes
-                    const pdfSizeInKB = pdfSizeInBytes / 1024; // Convert bytes to KB
-                    const pdfSizeInMB = pdfSizeInBytes / (1024 * 1024); // Convert bytes to MB
+            // Save the PDF
+            // pdf.save('calendar_a3.pdf');
+          });
+        };
 
-                    document.getElementById('size').innerHTML = `PDF size: ${pdfSizeInMB > 1 ? pdfSizeInMB.toFixed(2) + " M" : pdfSizeInKB.toFixed(2) + " K"}B`;
+        // Button to trigger the PDF generation
+        const printButton = document.getElementById("printButton");
+        // document.body.append(printButton, calendarGrid);
 
-                    const url = URL.createObjectURL(pdfBlob);
-                    window.open(url, '_blank');
-
-                    // Save the PDF
-                    // pdf.save('calendar_a3.pdf');
-                });
-            };
-
-            // Button to trigger the PDF generation
-            const printButton = document.getElementById('printButton');
-            // document.body.append(printButton, calendarGrid);
-
-            printButton.addEventListener('click', printCalendarAsPDF);
-        });
+        printButton.addEventListener("click", printCalendarAsPDF);
+      });
     </script>
     <script src="./js/calendar.js"></script>
     <script>
-        // Function to parse the date from the day-box
-        function parseDate(dateString) {
-            const gregorianPart = dateString.split('/')[1].trim();
-            const [day, month] = gregorianPart.split(' ');
-            const currentYear = new Date().getFullYear();
-            const date = new Date(`${month} ${day}, ${currentYear}`);
-            return date;
+      // Function to parse the date from the day-box using data-date (ISO) for correct year handling
+      function parseDateFromBox(dayBox, dateStringFallback) {
+        if (dayBox.dataset.date) {
+          const d = new Date(dayBox.dataset.date + "T00:00:00");
+          if (!isNaN(d)) return d;
         }
-
-        // Function to create a wrapper for each day-box
-        function wrapDayBoxes() {
-            const dayBoxes = document.querySelectorAll('.day-box');
-
-            dayBoxes.forEach(dayBox => {
-                // Only wrap if not already wrapped
-                if (!dayBox.parentElement.classList.contains('day-box-wrapper')) {
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'day-box-wrapper';
-                    dayBox.parentNode.insertBefore(wrapper, dayBox);
-                    wrapper.appendChild(dayBox);
-                }
-            });
+        // Fallback legacy (no year) parsing: infer academic year boundary (Aug -> Jan crosses year)
+        const gregorianPart = dateStringFallback.split("/")[1].trim(); // e.g. "24 Aug"
+        const [dayStr, monAbbr] = gregorianPart.split(" ");
+        const monthMap = {
+          Jan: 0,
+          Feb: 1,
+          Mar: 2,
+          Apr: 3,
+          May: 4,
+          Jun: 5,
+          Jul: 6,
+          Aug: 7,
+          Sep: 8,
+          Oct: 9,
+          Nov: 10,
+          Dec: 11,
+        };
+        const m = monthMap[monAbbr];
+        // Determine start year from first box with data-date or current year as baseline
+        let startYear = new Date().getFullYear();
+        const firstBox = document.querySelector(".day-box[data-date]");
+        if (firstBox && firstBox.dataset.date) {
+          startYear = new Date(firstBox.dataset.date).getFullYear();
         }
+        // Academic year starts in Aug (7). Months < 7 and less than start month belong to next year
+        const year = m < 7 && startYear ? startYear + 1 : startYear;
+        return new Date(year, m, parseInt(dayStr, 10));
+      }
 
-        // Function to update day boxes with visual indicators
-        function updateDayBoxes() {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+      // Function to create a wrapper for each day-box
+      function wrapDayBoxes() {
+        const dayBoxes = document.querySelectorAll(".day-box");
 
-            // First ensure all day boxes are wrapped
-            wrapDayBoxes();
+        dayBoxes.forEach((dayBox) => {
+          // Only wrap if not already wrapped
+          if (!dayBox.parentElement.classList.contains("day-box-wrapper")) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "day-box-wrapper";
+            dayBox.parentNode.insertBefore(wrapper, dayBox);
+            wrapper.appendChild(dayBox);
+          }
+        });
+      }
 
-            // Get all day box wrappers
-            const dayBoxWrappers = document.querySelectorAll('.day-box-wrapper');
+      // Function to update day boxes with visual indicators
+      function updateDayBoxes() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
-            dayBoxWrappers.forEach(wrapper => {
-                const dayBox = wrapper.querySelector('.day-box');
-                const dateParagraph = dayBox.querySelector('p');
-                const dateText = dateParagraph.textContent;
-                const boxDate = parseDate(dateText);
+        // First ensure all day boxes are wrapped
+        wrapDayBoxes();
 
-                // Remove any existing indicators
-                const existingIndicator = wrapper.querySelector('.date-indicator');
-                if (existingIndicator) {
-                    existingIndicator.remove();
-                }
+        // Get all day box wrappers
+        const dayBoxWrappers = document.querySelectorAll(".day-box-wrapper");
 
-                // Reset styles
-                dayBox.classList.remove('past-date', 'current-date');
-                dayBox.style.textDecoration = '';
-                dayBox.style.opacity = '';
-                dayBox.style.border = '';
-                dayBox.style.boxShadow = '';
+        dayBoxWrappers.forEach((wrapper) => {
+          const dayBox = wrapper.querySelector(".day-box");
+          const dateParagraph = dayBox.querySelector("p");
+          const dateText = dateParagraph.textContent;
+          const boxDate = parseDateFromBox(dayBox, dateText);
 
-                if (boxDate < today) {
-                    // Past date
-                    dayBox.classList.add('past-date');
+          // Remove any existing indicators
+          const existingIndicator = wrapper.querySelector(".date-indicator");
+          if (existingIndicator) {
+            existingIndicator.remove();
+          }
 
-                    // Add checkmark before the day-box
-                    const checkmark = document.createElement('span');
-                    checkmark.className = 'date-indicator checkmark';
-                    checkmark.innerHTML = '✓';
-                    wrapper.insertBefore(checkmark, dayBox);
+          // Reset styles
+          dayBox.classList.remove("past-date", "current-date");
+          dayBox.style.textDecoration = "";
+          dayBox.style.opacity = "";
+          dayBox.style.border = "";
+          dayBox.style.boxShadow = "";
 
-                    // Add strike-through effect
-                    dayBox.style.textDecoration = 'line-through';
-                    dayBox.style.textDecorationColor = '#666';
-                    dayBox.style.opacity = '0.7';
-                }
-                else if (boxDate.getTime() === today.getTime()) {
-                    // Current date
-                    dayBox.classList.add('current-date');
+          if (boxDate < today) {
+            // Past date
+            dayBox.classList.add("past-date");
 
-                    // Add "TODAY" indicator
-                    const todayIndicator = document.createElement('span');
-                    todayIndicator.className = 'date-indicator today';
-                    todayIndicator.innerHTML = '📍';
-                    wrapper.insertBefore(todayIndicator, dayBox);
+            // Add checkmark before the day-box
+            const checkmark = document.createElement("span");
+            checkmark.className = "date-indicator checkmark";
+            checkmark.innerHTML = "✓";
+            wrapper.insertBefore(checkmark, dayBox);
 
-                    // Highlight current day
-                    dayBox.style.border = '2px solid #007bff';
-                    dayBox.style.boxShadow = '0 0 10px rgba(0,123,255,0.2)';
-                }
-            });
-        }
+            // Add strike-through effect
+            dayBox.style.textDecoration = "line-through";
+            dayBox.style.textDecorationColor = "#666";
+            dayBox.style.opacity = "0.7";
+          } else if (boxDate.getTime() === today.getTime()) {
+            // Current date
+            dayBox.classList.add("current-date");
 
-        // Add required CSS
-        const styles = `
+            // Add "TODAY" indicator
+            const todayIndicator = document.createElement("span");
+            todayIndicator.className = "date-indicator today";
+            todayIndicator.innerHTML = "📍";
+            wrapper.insertBefore(todayIndicator, dayBox);
+
+            // Highlight current day
+            dayBox.style.border = "2px solid #007bff";
+            dayBox.style.boxShadow = "0 0 10px rgba(0,123,255,0.2)";
+          }
+        });
+      }
+
+      // Add required CSS
+      const styles = `
         .day-box-wrapper {
             position: relative;
             margin-bottom: 5px;
@@ -208,27 +243,27 @@
         }
     `;
 
-        // Add styles to document
-        const styleSheet = document.createElement("style");
-        styleSheet.textContent = styles;
-        document.head.appendChild(styleSheet);
+      // Add styles to document
+      const styleSheet = document.createElement("style");
+      styleSheet.textContent = styles;
+      document.head.appendChild(styleSheet);
 
-        // Initialize on DOM content loaded
-        document.addEventListener('DOMContentLoaded', () => {
+      // Initialize on DOM content loaded
+      document.addEventListener("DOMContentLoaded", () => {
+        updateDayBoxes();
+
+        // Performance optimization: Only update when tab becomes visible
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState === "visible") {
             updateDayBoxes();
-
-            // Performance optimization: Only update when tab becomes visible
-            document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'visible') {
-                    updateDayBoxes();
-                }
-            });
+          }
         });
+      });
 
-        // Backup initialization in case DOMContentLoaded already fired
-        if (document.readyState !== 'loading') {
-            updateDayBoxes();
-        }
+      // Backup initialization in case DOMContentLoaded already fired
+      if (document.readyState !== "loading") {
+        updateDayBoxes();
+      }
     </script>
-</body>
+  </body>
 </html>
